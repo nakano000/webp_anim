@@ -79,13 +79,13 @@ class Model(QAbstractTableModel):
         self.endInsertRows()
         return False
 
-    def insert_row_data(self, i, row_data):
+    def insert_row_data(self, i: int, row_data):
         self.beginInsertRows(QModelIndex(), i, i)
         self._data.append(row_data)
         self.endInsertRows()
         return False
 
-    def insert_rows_data(self, i, row_data_list):
+    def insert_rows_data(self, i: int, row_data_list):
         count = len(row_data_list)
         self.beginInsertRows(QModelIndex(), i, i + count - 1)
         self._data[i: i] = row_data_list
@@ -137,20 +137,14 @@ class Model(QAbstractTableModel):
         return Qt.NoItemFlags
 
     def insertRow(self, row: int, parent: QModelIndex = ...) -> bool:
-        self.beginInsertRows(parent, row, row)
-        self._data.insert(row, self.new_row_data())
-        self.endInsertRows()
-        return False
+        return self.insert_row_data(row, self.new_row_data())
 
     def insertRows(self, row: int, count: int, parent: QModelIndex = ...) -> bool:
-        self.beginInsertRows(parent, row, row + count - 1)
-        self._data[row: row] = p.pipe(
+        return self.insert_rows_data(row, p.pipe(
             range(count),
             p.map(lambda _: self.new_row_data()),
             list,
-        )
-        self.endInsertRows()
-        return False
+        ))
 
     def removeRow(self, row: int, parent: QModelIndex = ...) -> bool:
         r = True
