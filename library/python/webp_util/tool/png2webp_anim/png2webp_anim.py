@@ -42,7 +42,7 @@ __version__ = '0.1.0'
 @dataclasses.dataclass
 class ImageData(basic_table.RowData):
     path: str = ''
-    duration: int = 33
+    duration: int = 100
 
     @classmethod
     def toHeaderList(cls) -> list[str]:
