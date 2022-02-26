@@ -10,7 +10,6 @@ from PIL import Image, ImageChops
 
 from PySide2.QtCore import (
     Qt,
-    QSize,
     QModelIndex,
     QItemSelectionModel,
 )
@@ -19,12 +18,10 @@ from PySide2.QtWidgets import (
     QFileDialog,
     QMainWindow,
     QHeaderView,
-    QAbstractItemView,
     QMenu,
-    QAction,
 )
 from PySide2.QtGui import (
-    QColor, QKeySequence, QPixmap,
+    QColor, QPixmap,
 )
 
 from webp_util.core import (
@@ -33,7 +30,7 @@ from webp_util.core import (
 )
 from webp_util.gui import (
     appearance,
-    base_table,
+    basic_table,
     log,
 )
 from webp_util.tool.png2webp_anim.png2webp_anim_ui import Ui_MainWindow
@@ -43,7 +40,7 @@ __version__ = '0.1.0'
 
 
 @dataclasses.dataclass
-class ImageData(base_table.RowData):
+class ImageData(basic_table.RowData):
     path: str = ''
     duration: int = 33
 
@@ -66,7 +63,7 @@ class AppData(config.Data):
     images: list[ImageData] = dataclasses.field(default_factory=list)
 
 
-class Model(base_table.Model):
+class Model(basic_table.Model):
     def __init__(self, parent=None):
         super().__init__(parent)
         self._data: list[ImageData] = []
