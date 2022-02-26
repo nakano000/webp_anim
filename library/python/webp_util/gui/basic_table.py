@@ -147,22 +147,24 @@ class Model(QAbstractTableModel):
         ))
 
     def removeRow(self, row: int, parent: QModelIndex = ...) -> bool:
-        r = True
+        r: bool = False
         self.beginRemoveRows(parent, row, row)
         try:
             del self._data[row]
+            r = True
         except IndexError:
-            r = False
+            pass
         self.endRemoveRows()
         return r
 
     def removeRows(self, row: int, count: int, parent: QModelIndex = ...) -> bool:
-        r: bool = True
+        r: bool = False
         self.beginRemoveRows(parent, row, row + count - 1)
         try:
             del self._data[row: row + count]
+            r = True
         except IndexError:
-            r = False
+            pass
         self.endRemoveRows()
         return r
 
