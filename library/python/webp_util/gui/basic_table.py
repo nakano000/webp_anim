@@ -1,7 +1,6 @@
 import copy
 import dataclasses
 import operator
-from typing import Any
 
 from PySide2.QtCore import (
     Qt,
