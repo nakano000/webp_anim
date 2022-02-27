@@ -182,6 +182,7 @@ class MainWindow(QMainWindow):
         self.ui.closeButton.clicked.connect(self.close)
         self.ui.webpButton.clicked.connect(self.webp, Qt.QueuedConnection)
 
+        self.ui.actionNew.triggered.connect(self.new)
         self.ui.actionOpen.triggered.connect(self.open)
         self.ui.actionSave.triggered.connect(self.save)
         self.ui.actionExit.triggered.connect(self.close)
@@ -219,7 +220,8 @@ class MainWindow(QMainWindow):
 
         s = QApplication.clipboard().text()
         for i in sm.selectedIndexes():
-            m.setData(i, s, Qt.EditRole)
+            if i.column() != 0:
+                m.setData(i, s, Qt.EditRole)
 
     def delete(self):
         v = self.ui.tableView
@@ -329,6 +331,9 @@ class MainWindow(QMainWindow):
         config.CONFIG_DIR.mkdir(parents=True, exist_ok=True)
         c = self.get_config_data()
         c.save(self.config_file)
+
+    def new(self):
+        self.set_data(AppData())
 
     def open(self, is_template=False) -> None:
         dir_path = str(self.template_dir) if is_template else self.ui.dstLineEdit.text().strip()
