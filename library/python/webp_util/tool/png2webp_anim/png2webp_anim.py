@@ -334,13 +334,15 @@ class MainWindow(QMainWindow):
 
     def new(self):
         self.set_data(AppData())
+        self.clearLog()
+        self.add2log('New')
 
-    def open(self, is_template=False) -> None:
-        dir_path = str(self.template_dir) if is_template else self.ui.dstLineEdit.text().strip()
+    def open(self) -> None:
+        dir_path = Path(self.ui.dstLineEdit.text()).parent
         path, _ = QFileDialog.getOpenFileName(
             self,
             'Open File',
-            dir_path,
+            str(dir_path),
             'JSON File (*.json);;All File (*.*)'
         )
         if path != '':
@@ -349,18 +351,23 @@ class MainWindow(QMainWindow):
                 a = self.get_data()
                 a.load(file_path)
                 self.set_data(a)
+                self.clearLog()
+                self.add2log('Open: %s' % str(file_path))
 
     def save(self) -> None:
+        dir_path = Path(self.ui.dstLineEdit.text()).parent
         path, _ = QFileDialog.getSaveFileName(
             self,
             'Save File',
-            self.ui.dstLineEdit.text().strip(),
+            str(dir_path),
             'JSON File (*.json);;All File (*.*)'
         )
         if path != '':
             file_path = Path(path)
             a = self.get_data()
             a.save(file_path)
+            self.clearLog()
+            self.add2log('Save: %s' % str(file_path))
 
     def closeEvent(self, event):
         self.save_config()
