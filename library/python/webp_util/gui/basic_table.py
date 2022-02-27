@@ -1,4 +1,3 @@
-import copy
 import dataclasses
 import operator
 
@@ -63,13 +62,9 @@ class RowData(config.DataInterface):
 
 
 class Model(QAbstractTableModel):
-    def __init__(self, parent=None):
+    def __init__(self, cls, parent=None):
         super().__init__(parent)
-        self._data: list[RowData] = [
-        ]
-
-    def new_row_data(self):
-        return RowData()
+        self._data: config.DataList = config.DataList(cls)
 
     def add_row_data(self, row_data):
         i = len(self._data)
@@ -92,34 +87,39 @@ class Model(QAbstractTableModel):
         return False
 
     def get_row_data(self, row: int):
-        return copy.deepcopy(self._data[row])
+        return self._data[row]
 
     def get_value(self, row: int, col: int):
         return self._data[row].get_value(col)
 
     def to_list(self):
-        return copy.deepcopy(self._data)
+        return self._data.to_list()
 
     def set_list(self, lst):
         self.beginResetModel()
-        self._data = lst
+        self._data.set_list(lst)
+        self.endResetModel()
+
+    def set_data(self, data):
+        self.beginResetModel()
+        self._data = data
         self.endResetModel()
 
     def clear(self):
         self.beginResetModel()
-        self._data = []
+        self._data.clear()
         self.endResetModel()
 
     def rowCount(self, parent=QModelIndex()) -> int:
         return len(self._data)
 
     def columnCount(self, parent=QModelIndex()) -> int:
-        return len(self.new_row_data().toHeaderList())
+        return len(self._data.new_data().toHeaderList())
 
     def headerData(self, section: int, orientation: Qt.Orientation, role: int = Qt.DisplayRole):
         if role == Qt.DisplayRole:
             if orientation == Qt.Horizontal:
-                return self.new_row_data().toHeaderList()[section]
+                return self._data.new_data().toHeaderList()[section]
 
             return ''  # 垂直は表示しない
 
@@ -136,12 +136,12 @@ class Model(QAbstractTableModel):
         return Qt.NoItemFlags
 
     def insertRow(self, row: int, parent: QModelIndex = ...) -> bool:
-        return self.insert_row_data(row, self.new_row_data())
+        return self.insert_row_data(row, self._data.new_data())
 
     def insertRows(self, row: int, count: int, parent: QModelIndex = ...) -> bool:
         return self.insert_rows_data(row, p.pipe(
             range(count),
-            p.map(lambda _: self.new_row_data()),
+            p.map(lambda _: self._data.new_data()),
             list,
         ))
 

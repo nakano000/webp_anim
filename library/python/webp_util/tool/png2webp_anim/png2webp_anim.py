@@ -28,6 +28,9 @@ from webp_util.core import (
     config,
     pipe as p,
 )
+from webp_util.core.config import (
+    DataList,
+)
 from webp_util.gui import (
     appearance,
     basic_table,
@@ -60,16 +63,24 @@ class ConfigData(config.Data):
 @dataclasses.dataclass
 class AppData(config.Data):
     config: ConfigData = dataclasses.field(default_factory=ConfigData)
-    images: list[ImageData] = dataclasses.field(default_factory=list)
+    images: DataList = dataclasses.field(default_factory=lambda: DataList(ImageData))
+
+
+IMAGE_DIR = config.ROOT_PATH.joinpath('data', 'images')
+ERROR_IMAGE_PATH = IMAGE_DIR.joinpath('error.png')
+NOT_FOUND_IMAGE_PATH = IMAGE_DIR.joinpath('not_found.png')
+
+
+def get_pixmap(path: Path) -> QPixmap:
+    if not path.is_file():
+        path = NOT_FOUND_IMAGE_PATH
+    image = QPixmap(str(path))
+    if image.isNull():
+        image = QPixmap(str(ERROR_IMAGE_PATH))
+    return image.scaled(80, 45, Qt.KeepAspectRatio, Qt.FastTransformation)
 
 
 class Model(basic_table.Model):
-    def __init__(self, parent=None):
-        super().__init__(parent)
-        self._data: list[ImageData] = []
-
-    def new_row_data(self):
-        return ImageData()
 
     def data(self, index: QModelIndex, role: int = Qt.DisplayRole) -> Any:
         if index.isValid():
@@ -84,8 +95,8 @@ class Model(basic_table.Model):
                         self._data[index.row()],
                         dataclasses.astuple,
                         operator.itemgetter(index.column()),
-                        QPixmap,
-                        p.call.scaled(80, 45, Qt.KeepAspectRatio, Qt.FastTransformation)
+                        Path,
+                        get_pixmap,
                     )
 
             if role == Qt.ToolTipRole:
@@ -152,7 +163,7 @@ class MainWindow(QMainWindow):
 
         # table
         v = self.ui.tableView
-        v.setModel(Model())
+        v.setModel(Model(ImageData))
 
         hh = v.horizontalHeader()
         hh.setStretchLastSection(False)
@@ -292,7 +303,7 @@ class MainWindow(QMainWindow):
 
     def set_data(self, a: AppData):
         self.set_config_data(a.config)
-        self.ui.tableView.model().set_list(a.images)
+        self.ui.tableView.model().set_data(a.images)
 
     def get_config_data(self) -> ConfigData:
         c = ConfigData()
@@ -305,7 +316,7 @@ class MainWindow(QMainWindow):
     def get_data(self) -> AppData:
         a = AppData()
         a.config = self.get_config_data()
-        a.images = self.ui.tableView.model().to_list()
+        a.images.set_list(self.ui.tableView.model().to_list())
         return a
 
     def load_config(self) -> None:
