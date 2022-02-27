@@ -3,7 +3,7 @@
 # Form implementation generated from reading ui file 'C:\Users\yoshi\PycharmProjects\webp_anim\library\python\webp_util\tool\png2webp_anim\png2webp_anim.ui',
 # licensing of 'C:\Users\yoshi\PycharmProjects\webp_anim\library\python\webp_util\tool\png2webp_anim\png2webp_anim.ui' applies.
 #
-# Created: Thu Feb 24 19:22:22 2022
+# Created: Sun Feb 27 12:38:16 2022
 #      by: pyside2-uic  running on PySide2 5.12.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -123,6 +123,9 @@ class Ui_MainWindow(object):
         self.actionDown.setObjectName("actionDown")
         self.actionDelete = QtWidgets.QAction(MainWindow)
         self.actionDelete.setObjectName("actionDelete")
+        self.actionNew = QtWidgets.QAction(MainWindow)
+        self.actionNew.setObjectName("actionNew")
+        self.menuFile.addAction(self.actionNew)
         self.menuFile.addAction(self.actionOpen)
         self.menuFile.addAction(self.actionSave)
         self.menuFile.addSeparator()
@@ -154,7 +157,7 @@ class Ui_MainWindow(object):
         self.menuEdit.setTitle(QtWidgets.QApplication.translate("MainWindow", "Edit", None, -1))
         self.actionOpen.setText(QtWidgets.QApplication.translate("MainWindow", "Open", None, -1))
         self.actionOpen.setShortcut(QtWidgets.QApplication.translate("MainWindow", "Ctrl+O", None, -1))
-        self.actionSave.setText(QtWidgets.QApplication.translate("MainWindow", "Save", None, -1))
+        self.actionSave.setText(QtWidgets.QApplication.translate("MainWindow", "Save as", None, -1))
         self.actionSave.setShortcut(QtWidgets.QApplication.translate("MainWindow", "Ctrl+S", None, -1))
         self.actionExit.setText(QtWidgets.QApplication.translate("MainWindow", "Exit", None, -1))
         self.actionExit.setShortcut(QtWidgets.QApplication.translate("MainWindow", "Ctrl+Q", None, -1))
@@ -168,5 +171,6 @@ class Ui_MainWindow(object):
         self.actionDown.setShortcut(QtWidgets.QApplication.translate("MainWindow", "Alt+Down", None, -1))
         self.actionDelete.setText(QtWidgets.QApplication.translate("MainWindow", "Delete", None, -1))
         self.actionDelete.setShortcut(QtWidgets.QApplication.translate("MainWindow", "Del", None, -1))
+        self.actionNew.setText(QtWidgets.QApplication.translate("MainWindow", "New", None, -1))
 
 from webp_util.gui.log import LogTextEdit
