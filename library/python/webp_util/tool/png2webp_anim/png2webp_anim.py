@@ -89,6 +89,9 @@ class Model(basic_table.Model):
                     return Path(dataclasses.astuple(self._data[index.row()])[index.column()]).name
                 return dataclasses.astuple(self._data[index.row()])[index.column()]
 
+            if role == Qt.EditRole:
+                return dataclasses.astuple(self._data[index.row()])[index.column()]
+
             if role == Qt.DecorationRole:
                 if index.column() == 0:
                     return p.pipe(
