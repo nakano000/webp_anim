@@ -207,6 +207,7 @@ class MainWindow(QMainWindow):
         menu.exec_(v.mapToGlobal(pos))
 
     def copy(self):
+        self.clearLog()
         v = self.ui.tableView
         m: Model = v.model()
         sm = v.selectionModel()
@@ -217,6 +218,7 @@ class MainWindow(QMainWindow):
             QApplication.clipboard().setText(s)
 
     def paste(self):
+        self.clearLog()
         v = self.ui.tableView
         m: Model = v.model()
         sm = v.selectionModel()
@@ -227,6 +229,7 @@ class MainWindow(QMainWindow):
                 m.setData(i, s, Qt.EditRole)
 
     def delete(self):
+        self.clearLog()
         v = self.ui.tableView
         m = v.model()
         sm = v.selectionModel()
@@ -242,6 +245,7 @@ class MainWindow(QMainWindow):
         sm.clearSelection()
 
     def up(self):
+        self.clearLog()
         v = self.ui.tableView
         m: Model = v.model()
         sm = v.selectionModel()
@@ -271,6 +275,7 @@ class MainWindow(QMainWindow):
                 sm.setCurrentIndex(index, QItemSelectionModel.Select)
 
     def down(self):
+        self.clearLog()
         v = self.ui.tableView
         m: Model = v.model()
         sm = v.selectionModel()
