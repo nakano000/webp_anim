@@ -39,7 +39,7 @@ from webp_util.gui import (
 from webp_util.tool.png2webp_anim.png2webp_anim_ui import Ui_MainWindow
 
 APP_NAME = 'PNGを合せてWebPアニメを作る'
-__version__ = '0.2.0'
+__version__ = '0.2.2'
 
 
 @dataclasses.dataclass
